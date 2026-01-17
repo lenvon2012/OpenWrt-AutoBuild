@@ -13,10 +13,10 @@ git clone https://github.com/db-one/dbone-packages.git -b 23.05 package/dbone-pa
 
 # 删除部分默认包
 rm -rf feeds/luci/applications/luci-app-qbittorrent
-rm -rf feeds/luci/applications/luci-app-openclash
+#rm -rf feeds/luci/applications/luci-app-openclash
 rm -rf feeds/luci/applications/luci-app-attendedsysupgrade
-rm -rf feeds/luci/themes/luci-theme-argon
-rm -rf package/dbone-packages/passwall/packages/v2ray-geoview
+#rm -rf feeds/luci/themes/luci-theme-argon
+#rm -rf package/dbone-packages/passwall/packages/v2ray-geoview
 
 # 安装源
 ./scripts/feeds install -a -f
@@ -29,8 +29,8 @@ NET="package/base-files/files/bin/config_generate"
 ZZZ="package/emortal/default-settings/files/99-default-settings"
 
 #
-sed -i "s#192.168.1.1#10.0.0.1#g" $NET                                                     # 定制默认IP
-# sed -i "s#ImmortalWrt#ImmortalWrt-X86#g" $NET                                          # 修改默认名称为 ImmortalWrt-X86
+sed -i "s#192.168.1.1#1192.168.10.1#g" $NET                                                     # 定制默认IP
+ sed -i "s#ImmortalWrt#OpenWrt#g" $NET                                          # 修改默认名称为 ImmortalWrt-X86
 # sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' $ZZZ                                          # 取消系统默认密码
 echo "uci set luci.main.mediaurlbase=/luci-static/argon" >> $ZZZ                      # 设置默认主题(如果编译可会自动修改默认主题的，有可能会失效)
 
@@ -54,7 +54,7 @@ EOF
 
 cat >> $ZZZ <<-EOF
 # 设置网络-旁路由模式
-uci set network.lan.gateway='10.0.0.254'                     # 旁路由设置 IPv4 网关
+uci set network.lan.gateway='192.168.10.254'                     # 旁路由设置 IPv4 网关
 uci set network.lan.dns='223.5.5.5 119.29.29.29'            # 旁路由设置 DNS(多个DNS要用空格分开)
 uci set dhcp.lan.ignore='1'                                  # 旁路由关闭DHCP功能
 uci delete network.lan.type                                  # 旁路由桥接模式-禁用
@@ -245,19 +245,31 @@ EOF
 
 # 第三方插件选择:
 cat >> .config <<EOF
-# CONFIG_PACKAGE_luci-app-oaf=y #应用过滤
+CONFIG_PACKAGE_luci-app-oaf=y #应用过滤
+CONFIG_PACKAGE_luci-app-advanced=y #应用过滤
 CONFIG_PACKAGE_luci-app-openclash=y #OpenClash客户端
 CONFIG_PACKAGE_luci-app-nikki=y #nikki 客户端
 # CONFIG_PACKAGE_luci-app-serverchan=y #微信推送
 # CONFIG_PACKAGE_luci-app-eqos=y #IP限速
-# CONFIG_PACKAGE_luci-app-control-weburl=y #网址过滤
-# CONFIG_PACKAGE_luci-app-smartdns=y #smartdns服务器
-# CONFIG_PACKAGE_luci-app-adguardhome=y #ADguardhome
+CONFIG_PACKAGE_luci-app-control-weburl=y #网址过滤
+CONFIG_PACKAGE_luci-app-mosdns=y #smartdns服务器
+CONFIG_PACKAGE_luci-app-smartdns=y #smartdns服务器
+CONFIG_PACKAGE_luci-app-adguardhome=y #ADguardhome
 CONFIG_PACKAGE_luci-app-poweroff=y #关机（增加关机功能）
-# CONFIG_PACKAGE_luci-app-argon-config=y #argon主题设置
-# CONFIG_PACKAGE_luci-app-autotimeset=y #定时重启系统，网络
-# CONFIG_PACKAGE_luci-app-ddnsto=y #小宝开发的DDNS.to内网穿透
-# CONFIG_PACKAGE_ddnsto=y #DDNS.to内网穿透软件包
+CONFIG_PACKAGE_luci-app-argon-config=y #argon主题设置
+CONFIG_PACKAGE_luci-app-argone-config=y #argon主题设置
+CONFIG_PACKAGE_luci-app-autotimeset=y #定时重启系统，网络
+CONFIG_PACKAGE_luci-app-ddns-go=y #定时重启系统，网络
+CONFIG_PACKAGE_luci-app-docker=y #定时重启系统，网络
+CONFIG_PACKAGE_luci-app-dockerman=y #定时重启系统，网络
+CONFIG_PACKAGE_luci-app-lucky=y #定时重启系统，网络
+CONFIG_PACKAGE_luci-app-vlmcsd=y #配置Vlmcsd KMS服务器
+CONFIG_PACKAGE_luci-app-udpxy=y #配置UDProxy代理工具
+CONFIG_PACKAGE_luci-app-store=y #配置应用商店
+CONFIG_PACKAGE_luci-app-diskman=y #磁盘管理工具
+CONFIG_PACKAGE_luci-app-unblockneteasemusic=y #磁盘管理工具
+#CONFIG_PACKAGE_luci-app-ddnsto=y #小宝开发的DDNS.to内网穿透
+#CONFIG_PACKAGE_ddnsto=y #DDNS.to内网穿透软件包
 EOF
 
 # # istorex首页插件:
@@ -275,7 +287,7 @@ EOF
 # Passwall插件:
 cat >> .config <<EOF
 CONFIG_PACKAGE_luci-app-passwall=y
-# CONFIG_PACKAGE_luci-app-passwall2=y
+CONFIG_PACKAGE_luci-app-passwall2=y
 # CONFIG_PACKAGE_naiveproxy=y
 CONFIG_PACKAGE_chinadns-ng=y
 # CONFIG_PACKAGE_brook=y
@@ -288,33 +300,33 @@ EOF
 cat >> .config <<EOF
 CONFIG_PACKAGE_luci-app-firewall=y
 CONFIG_PACKAGE_luci-app-package-manager=y
-CONFIG_PACKAGE_luci-app-accesscontrol=n #上网时间控制
+CONFIG_PACKAGE_luci-app-accesscontrol=y #上网时间控制
 CONFIG_PACKAGE_luci-app-filetransfer=y #文件传输
 CONFIG_PACKAGE_luci-app-frpc=y #Frpc客户端
-CONFIG_PACKAGE_luci-app-upnp=n #UPNP服务器
-CONFIG_PACKAGE_luci-app-vlmcsd=n #KMS激活服务器
-CONFIG_PACKAGE_luci-app-nlbwmon=n #宽带流量监控
-CONFIG_PACKAGE_luci-app-wol=n #网络唤醒
+CONFIG_PACKAGE_luci-app-upnp=y #UPNP服务器
+CONFIG_PACKAGE_luci-app-vlmcsd=y #KMS激活服务器
+CONFIG_PACKAGE_luci-app-nlbwmon=y #宽带流量监控
+CONFIG_PACKAGE_luci-app-wol=y #网络唤醒
 #
 # VPN相关插件(禁用):
 #
 CONFIG_PACKAGE_luci-app-v2ray-server=y #V2ray服务器
-CONFIG_PACKAGE_luci-app-ipsec-vpnd=n #ipsec VPN服务
-CONFIG_PACKAGE_luci-app-openvpn-server=n #openvpn服务
+CONFIG_PACKAGE_luci-app-ipsec-vpnd=y #ipsec VPN服务
+CONFIG_PACKAGE_luci-app-openvpn-server=y #openvpn服务
 CONFIG_PACKAGE_luci-app-softethervpn=n #SoftEtherVPN服务器
 #
 # 文件共享相关(禁用):
 #
-CONFIG_PACKAGE_luci-app-minidlna=n #miniDLNA服务
-CONFIG_PACKAGE_luci-app-vsftpd=n #FTP 服务器
-CONFIG_PACKAGE_luci-app-samba=n #网络共享
-CONFIG_PACKAGE_autosamba=n #网络共享
+CONFIG_PACKAGE_luci-app-minidlna=y #miniDLNA服务
+CONFIG_PACKAGE_luci-app-vsftpd=y #FTP 服务器
+CONFIG_PACKAGE_luci-app-samba=y #网络共享
+CONFIG_PACKAGE_autosamba=y #网络共享
 EOF
 
 # LuCI主题:
 cat >> .config <<EOF
 CONFIG_PACKAGE_luci-theme-argon=y
-CONFIG_PACKAGE_luci-theme-edge=n
+CONFIG_PACKAGE_luci-theme-edge=y
 EOF
 
 # 常用软件包:
