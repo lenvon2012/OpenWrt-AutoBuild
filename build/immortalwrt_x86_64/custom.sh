@@ -13,10 +13,10 @@ git clone https://github.com/db-one/dbone-packages.git -b 23.05 package/dbone-pa
 
 # 删除部分默认包
 rm -rf feeds/luci/applications/luci-app-qbittorrent
-#rm -rf feeds/luci/applications/luci-app-openclash
+rm -rf feeds/luci/applications/luci-app-openclash
 rm -rf feeds/luci/applications/luci-app-attendedsysupgrade
-#rm -rf feeds/luci/themes/luci-theme-argon
-#rm -rf package/dbone-packages/passwall/packages/v2ray-geoview
+rm -rf feeds/luci/themes/luci-theme-argon
+rm -rf package/dbone-packages/passwall/packages/v2ray-geoview
 
 # 安装源
 ./scripts/feeds install -a -f
@@ -212,8 +212,8 @@ EOF
 # 编译PVE/KVM、Hyper-V、VMware镜像以及镜像填充
 cat >> .config <<EOF
 CONFIG_QCOW2_IMAGES=y
-# CONFIG_VHDX_IMAGES=y
-# CONFIG_VMDK_IMAGES=y
+CONFIG_VHDX_IMAGES=y
+CONFIG_VMDK_IMAGES=y
 CONFIG_TARGET_IMAGES_PAD=y
 EOF
 
