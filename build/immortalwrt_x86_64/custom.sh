@@ -29,7 +29,7 @@ NET="package/base-files/files/bin/config_generate"
 ZZZ="package/emortal/default-settings/files/99-default-settings"
 
 #
-sed -i "s#192.168.1.1#1192.168.10.1#g" $NET                                                     # 定制默认IP
+sed -i "s#192.168.1.1#192.168.10.1#g" $NET                                                     # 定制默认IP
 sed -i "s#ImmortalWrt#OpenWrt#g" $NET                                          # 修改默认名称为 ImmortalWrt-X86
 # sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' $ZZZ                                          # 取消系统默认密码
 echo "uci set luci.main.mediaurlbase=/luci-static/argon" >> $ZZZ                      # 设置默认主题(如果编译可会自动修改默认主题的，有可能会失效)
@@ -54,7 +54,7 @@ EOF
 
 cat >> $ZZZ <<-EOF
 # 设置网络-旁路由模式
-uci set network.lan.gateway='192.168.10.254'                     # 旁路由设置 IPv4 网关
+uci set network.lan.gateway='192.168.10.250'                     # 旁路由设置 IPv4 网关
 uci set network.lan.dns='223.5.5.5 119.29.29.29'            # 旁路由设置 DNS(多个DNS要用空格分开)
 uci set dhcp.lan.ignore='1'                                  # 旁路由关闭DHCP功能
 uci delete network.lan.type                                  # 旁路由桥接模式-禁用
@@ -189,8 +189,8 @@ EOF
 
 # 设置固件大小:
 cat >> .config <<EOF
-CONFIG_TARGET_KERNEL_PARTSIZE=16
-CONFIG_TARGET_ROOTFS_PARTSIZE=1028
+CONFIG_TARGET_KERNEL_PARTSIZE=32
+CONFIG_TARGET_ROOTFS_PARTSIZE=1024
 EOF
 
 # 固件压缩:
@@ -261,7 +261,7 @@ CONFIG_PACKAGE_luci-app-argone-config=y #argon主题设置
 CONFIG_PACKAGE_luci-app-autotimeset=y #定时重启系统，网络
 CONFIG_PACKAGE_luci-app-ddns-go=y #定时重启系统，网络
 CONFIG_PACKAGE_luci-app-docker=y #定时重启系统，网络
-CONFIG_PACKAGE_luci-app-dockerman=y #定时重启系统，网络
+#CONFIG_PACKAGE_luci-app-dockerman=y #定时重启系统，网络
 CONFIG_PACKAGE_luci-app-lucky=y #定时重启系统，网络
 CONFIG_PACKAGE_luci-app-vlmcsd=y #配置Vlmcsd KMS服务器
 CONFIG_PACKAGE_luci-app-udpxy=y #配置UDProxy代理工具
@@ -305,7 +305,7 @@ CONFIG_PACKAGE_luci-app-filetransfer=y #文件传输
 CONFIG_PACKAGE_luci-app-frpc=y #Frpc客户端
 CONFIG_PACKAGE_luci-app-upnp=y #UPNP服务器
 CONFIG_PACKAGE_luci-app-vlmcsd=y #KMS激活服务器
-CONFIG_PACKAGE_luci-app-nlbwmon=y #宽带流量监控
+CONFIG_PACKAGE_luci-app-nlbwmon=n #宽带流量监控
 CONFIG_PACKAGE_luci-app-wol=y #网络唤醒
 #
 # VPN相关插件(禁用):
@@ -313,7 +313,7 @@ CONFIG_PACKAGE_luci-app-wol=y #网络唤醒
 CONFIG_PACKAGE_luci-app-v2ray-server=y #V2ray服务器
 CONFIG_PACKAGE_luci-app-ipsec-vpnd=y #ipsec VPN服务
 CONFIG_PACKAGE_luci-app-openvpn-server=y #openvpn服务
-CONFIG_PACKAGE_luci-app-softethervpn=n #SoftEtherVPN服务器
+CONFIG_PACKAGE_luci-app-softethervpn=y #SoftEtherVPN服务器
 #
 # 文件共享相关(禁用):
 #
